@@ -1,0 +1,12 @@
+coder:
+  env:
+    - name: CODER_PG_CONNECTION_URL
+      value: postgres://coder:coder@coder-db-postgresql.database.svc.cluster.local:5432/coder?sslmode=disable
+  envUseClusterAccessURL: true
+  service:
+    enable: true
+    externalTrafficPolicy: Local
+    sessionAffinity: None
+    annotations: 
+      service.beta.kubernetes.io/aws-load-balancer-internal: "false"
+      service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
