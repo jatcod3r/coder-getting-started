@@ -29,7 +29,7 @@ Within the cluster, make sure that you have the following configured:
 
 ## Step 1. Creating the Namespace(s)
 
-To avoid grouping Coder with other non-Coder resources, we need to create a separate [namespace](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/) for it inside of our cluster. We'll call this `coder`.
+To avoid grouping Coder with other non-Coder resources, we use [namespaces](https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/). We'll create one called `coder`.
 
 ```bash
 $ kubectl create namespace coder
@@ -37,9 +37,7 @@ $ kubectl create namespace coder
 
 ---
 
-**(Optional)** If you don't have an external database, then we can configure one inside the cluster too. Make sure you also have a separate namespace for this.
-
-The same command will be ran, but we'll call this `database`:
+**(Optional)** If you don't have an external database, then we can configure an internal one. Make sure you also have a separate namespace for this. We'll call this `database`:
 
 ```bash
 $ kubectl create namespace database
@@ -84,7 +82,7 @@ coder:
       service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 ```
 
-Keep in mind that this is assuming your database isn't setup externally. If it's internal, then the YAML slightly changes the value of `CODER_PG_CONNECTION_URL`:
+Keep in mind that this assumes your database isn't outside the cluster. If it's internal, then the YAML slightly changes `CODER_PG_CONNECTION_URL`
 
 ```yaml
 coder:
@@ -167,7 +165,7 @@ coder:
       service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
 ```
 
-Where `CODER_PG_CONNECTION_URL` references the database within the cluster located in a different namespace via the database's `Service`. 
+where `CODER_PG_CONNECTION_URL` references the database endpoint in a different namespace via the it's `Service`. 
 
 ---
 
@@ -202,7 +200,6 @@ $ kubectl get service -n coder
 NAME    TYPE           CLUSTER-IP      EXTERNAL-IP                                             PORT(S)        AGE
 coder   LoadBalancer   10.100.134.47   k8s-coder-coder-****-****.elb.us-east-1.amazonaws.com   80:32071/TCP   65m
 ```
-
 
 ## Troubleshooting
 

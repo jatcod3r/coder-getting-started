@@ -1,5 +1,9 @@
 # AWS
 
+### Tutorial Cost
+
+Free??
+
 ## Step 1. Create your Account
 
 Go to [AWS](https://aws.amazon.com/resources/create-account/) and create your cloud account. Alternaively, click this [link](https://signin.aws.amazon.com/signup?request_type=register) to get started.
@@ -348,10 +352,16 @@ All clusters created from the EKS Console (v1.29+) have "EKS Auto-Mode" enabled.
 
 To see how the `ebs.csi.eks.amazonaws.com` provisioner is used, reference ["Creating a Storage Class"](https://docs.aws.amazon.com/eks/latest/userguide/create-storage-class.html) example on the AWS documentation. 
 
-
-
 ---
 
 # GCP
 
+### Tutorial Cost
+
+Free??
+
 # Azure
+
+### Tutorial Cost
+
+Free??
