@@ -1,20 +1,34 @@
-# AWS
+# Creating K8s Infrastructure For Coder
+
+By default, Coder will automtically create the resources you need with it's [Helm chart](https://artifacthub.io/packages/helm/coder-v2/coder). However, to deploy Coder on K8s this generally requires existing Kubernetes infrastructure to support it which can vary between providers.
+
+If you need guidance on setting them up, then follow this document to see different ways of setting up K8s infrastructure with [Minikube](#minikube), [AWS](#aws-elastic-kubernetes-service-setup), [GCP](#google-kubernetes-engine), [Azure](#azure-kubernetes-service), and [Rancher](#ranchers-kubernetes-service).
+
+# Minikube
+
+### Tutorial Cost
+
+Free
+
+---
+
+# AWS Elastic Kubernetes Service
 
 ### Tutorial Cost
 
 Free??
 
-## Step 1. Create your Account
+### Step 1. Create your Account
 
 Go to [AWS](https://aws.amazon.com/resources/create-account/) and create your cloud account. Alternaively, click this [link](https://signin.aws.amazon.com/signup?request_type=register) to get started.
 
-## Step 2. Create your Cluster
+### Step 2. Create your Cluster
 
 Navigate to the [`"Elastic Kubernetes Service"`](https://us-east-1.console.aws.amazon.com/eks/welcome?region=us-east-1) (EKS) dashboard.
 
 - NOTE: If you opened the link, change your deployment region back to the original if it differs from what you were just in.
 
-Once you're on the EKS home page, select ["Create Cluster](https://us-east-1.console.aws.amazon.com/eks/cluster-create?region=us-east-1).
+Once you're on the EKS home page, select ["Create Cluster"](https://us-east-1.console.aws.amazon.com/eks/cluster-create?region=us-east-1).
 
 **(Optional)** There will be two empty options on the create page: "Cluster IAM role" and "Node IAM role". If you don't have any roles, select "Create Recommended Role" and follow it's creation steps. Afterwards, the menu will have similar options to the image below:
 
@@ -24,7 +38,7 @@ If your options look accurate, select "Create" to start provisioning the cluster
 
 The cluster will now be in a `Creating...` state. This may take several minutes to complete.
 
-## Step 3. Download your tools.
+### Step 3. Download your tools.
 
 Before moving on, connect your desktop to the cluster and manage it. To do this, you'll need the following tools:
 
@@ -34,7 +48,7 @@ Before moving on, connect your desktop to the cluster and manage it. To do this,
 
 Make sure to download any you're missing (for Windows, MacOS, Linux, etc). Otherwise, visit their home page to install them onto your system.
 
-## Step 4. Get AWS IAM Credentials
+### Step 4. Get AWS IAM Credentials
 
 Before interacting with your cluster, you need credentials. To do this, create a valid IAM user or principal first.
 
@@ -58,7 +72,7 @@ The user is created now. Next, we create it's credentials.
 
 Save the credential details on your clipboard, in a file, or download it. If you mess up anywhere, delete the access key by selecting "Actions > Deactive > Delete" and can recreate it by following the same steps.
 
-## Step 5. Use AWS IAM Credentials Locally.
+### Step 5. Use AWS IAM Credentials Locally.
 
 To use your credentials, run the following command:
 
@@ -98,7 +112,7 @@ The output should look like:
 }
 ```
 
-## Step 6. Create the Cluster Access Entry
+### Step 6. Create the Cluster Access Entry
 
 Once the cluster is in an `Active` state, ensure that the cluster lets your IAM principal access it. To do this, go to the EKS dashboard, select "Clusters", and select the cluster you've created.
 
@@ -128,7 +142,7 @@ Under access policies, search up `AmazonEKSClusterAdminPolicy`, select it, and k
 
 To finalize creating the access entry, select "Create". You should be redirected to a page that shows "IAM access entry info", showing the access entry you created for your IAM principal and the AmazonEKSClusterAdminPolicy you tied to it.
 
-## Step 7. Connecting to the Cluster
+### Step 7. Connecting to the Cluster
 
 After getting the access entry, we can start generating a local file defining how to connect. To do this, run the following command to automatically create this local Kubernetes configuration file called `kubeconfig`:
 
@@ -184,7 +198,7 @@ $ kubectl config current-context
 $ kubectl get svc
 ```
 
-## Step 8. Create a Default Storage Class
+### Step 8. Create a Default Storage Class
 
 You should now be able to connect to your cluster and run any K8s APIs against it. 
 
@@ -230,7 +244,7 @@ gp2                     kubernetes.io/aws-ebs       Delete          WaitForFirst
 
 # Troubleshooting
 
-## Unable to create an AWS Account
+### Unable to create an AWS Account
 
 Make sure that your email is not already in-use. You should receive a confirmation email in your inbox with a confirmation code. Otherwise, be sure to review the related resources or [contact AWS support](https://aws.amazon.com/contact-us/) for assistance.
 
@@ -239,7 +253,7 @@ Make sure that your email is not already in-use. You should receive a confirmati
 - [Can I reopen my closed AWS account?](https://repost.aws/knowledge-center/reopen-aws-account)
 - [Reset a lost or forgotten user root password](https://docs.aws.amazon.com/IAM/latest/UserGuide/reset-root-password.html)
 
-## Unable to Create Cluster
+### Unable to Create Cluster
 
 If you're on a brand new AWS Account, the process can take up to 10 minutes or more. You may also receive an email like the following for creating a cluster for the first time:
 
@@ -262,13 +276,13 @@ If you're not on a brand new AWS account, make sure to review AWS's ["Create a C
 
     - [eks:CreateCluster](https://docs.aws.amazon.com/eks/latest/APIReference/API_CreateCluster.html)
     - [eks:DescribeCluster](https://docs.aws.amazon.com/eks/latest/APIReference/API_DescribeCluster.html)
-    - [eks:ListClusters]((https://docs.aws.amazon.com/eks/latest/APIReference/API_ListClusters.html))
+    - [eks:ListClusters](https://docs.aws.amazon.com/eks/latest/APIReference/API_ListClusters.html)
     - [eks:UpdateClusterConfig](https://docs.aws.amazon.com/eks/latest/APIReference/API_UpdateClusterConfig.html)
     - [eks:UpdateClusterVersion](https://docs.aws.amazon.com/eks/latest/APIReference/API_UpdateClusterVersion.html)
 
 You can also follow EKS's ["Create Cluster - AWS Console"](https://docs.aws.amazon.com/eks/latest/userguide/create-cluster.html#_step_2_create_cluster) guide to get a cluster ready. 
 
-## Unable to Download Tools
+### Unable to Download Tools
 
 The requirements for each tool will differ between systems. Make sure to visit their respective troubleshooting pages:
 
@@ -284,7 +298,7 @@ If you're unable to resolve your issue still, be sure to file a ticket to the re
 - [kubernetes/kubectl](https://github.com/kubernetes/kubectl/issues)
 - [helm/helm](https://github.com/helm/helm/issues)
 
-## Unable to Get IAM Credentials
+### Unable to Get IAM Credentials
 
 Make sure you have access to the AWS account the [required permissions](https://docs.aws.amazon.com/IAM/latest/UserGuide/access_permissions-required.html) to create IAM Users and associate/create policies. You can follow this AWS guide for ["Creating an IAM User in your AWS Account"](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_users_create.html) for more details.
 
@@ -319,7 +333,7 @@ If you're still having access key issues, then be sure to check the AWS document
 
 - [I Lost My Access Keys](https://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot.html#troubleshoot_general_access-keys)
 
-## Unable to Create an Access Entry
+### Unable to Create an Access Entry
 
 To add access entries, the principal you're logged in as needs sufficient IAM permissions. Make sure you can run:
 
@@ -338,7 +352,7 @@ If you have the correct permissions but are still having trouble creating an acc
 - [Grant IAM Users Access to K8s with Access Entries](https://docs.aws.amazon.com/eks/latest/userguide/access-entries.html)
 - [AmazonEKSClusterAdminPolicy](https://docs.aws.amazon.com/eks/latest/userguide/access-policy-permissions.html#access-policy-permissions-amazoneksclusteradminpolicy)
 
-## Unable to Connect to Cluster
+### Unable to Connect to Cluster
 
 If you're having any authorization issues and you're using the AWS CLI to automatically create your kubeconfig file, then make sure you have the `eks:DescribeCluster` IAM permission. Check out the following AWS documentation if you need more details
 
@@ -346,22 +360,24 @@ If you're having any authorization issues and you're using the AWS CLI to automa
 - [Unauthorized Access or Access Denied](https://docs.aws.amazon.com/eks/latest/userguide/troubleshooting.html)
 - [Hostname Doesn't Match](https://docs.aws.amazon.com/eks/latest/userguide/troubleshooting.html#python-version)
 
-## Unable to Create a Storage Class
+### Unable to Create a Storage Class
 
-All clusters created from the EKS Console (v1.29+) have "EKS Auto-Mode" enabled. This infers clusters use the [`CSIDriver`](https://kubernetes-csi.github.io/docs/csi-driver-object.html): `ebs.csi.eks.amazonaws.com`. 
+All clusters created from the EKS Console (v1.31+) have "EKS Auto-Mode" enabled. This infers clusters use the [`CSIDriver`](https://kubernetes-csi.github.io/docs/csi-driver-object.html): `ebs.csi.eks.amazonaws.com`. 
 
 To see how the `ebs.csi.eks.amazonaws.com` provisioner is used, reference ["Creating a Storage Class"](https://docs.aws.amazon.com/eks/latest/userguide/create-storage-class.html) example on the AWS documentation. 
 
 ---
 
-# GCP
+# Google Kubernetes Engine
 
 ### Tutorial Cost
 
 Free??
 
-# Azure
+# Azure Kubernetes Service
 
 ### Tutorial Cost
 
 Free??
+
+# Ranchers Kubernetes Service
